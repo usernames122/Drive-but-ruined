@@ -7,13 +7,24 @@ function CrapCrate:server_onMelee()
 end
 
 function CrapCrate:server_onExplosion() 
-  self:sv_open()
+  --self:sv_open()
+  -- Crates might accidentally kaboom itself, so i disabled it
 end
 
 function CrapCrate:server_onProjectile()
   self:sv_open()
 end
-
+function CrapCrate:server_onCreate()
+  local position = self.shape.getWorldPosition(self.shape)
+  sm.physics.explode({
+    position = position + sm.vec3.new(0,10,0),          -- Replace with the desired position vector (e.g., sm.vec3.new(x, y, z))
+    10,                       -- Set destruction level to 10 to destroy all blocks except those with quality level 10
+     10,           -- Set the destruction radius to 15
+    0,                -- Set impulse radius to 0 to prevent any push effects
+    0,                    -- Set magnitude to 0 to prevent any impulse effects
+      -- No additional parameters
+})
+end
 function CrapCrate:sv_open() 
   local position = self.shape.getWorldPosition(self.shape)
 
